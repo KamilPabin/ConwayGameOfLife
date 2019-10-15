@@ -65,4 +65,27 @@ class GameOfLifeTest extends Specification {
         then: "World is alive"
         !world.isDead()
     }
+
+    def "Dead cell with three neighbours should become alive"() {
+        given: "World with three adjacent cells"
+        WorldDto worldDto = new WorldBuilder()
+                .withAliveCellAt(1, 1)
+                .withAliveCellAt(1, 2)
+                .withAliveCellAt(2, 1)
+                .build()
+        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
+
+        when: "World moves by one game tick"
+        gameOfLife.tick()
+        WorldDto world = gameOfLife.world()
+
+        then: "World is alive"
+        def expectedWorld = new WorldBuilder()
+                .withAliveCellAt(1, 1)
+                .withAliveCellAt(1, 2)
+                .withAliveCellAt(2, 1)
+                .withAliveCellAt(2, 2)
+                .build()
+        expectedWorld.activeCells.containsAll(world.activeCells)
+    }
 }

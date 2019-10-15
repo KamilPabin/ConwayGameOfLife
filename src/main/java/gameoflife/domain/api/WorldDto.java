@@ -17,4 +17,11 @@ public class WorldDto {
     public List<ActiveCell> getActiveCells() {
         return activeCells;
     }
+
+    @Override
+    public String toString() {
+        return "WorldDto{" +
+                "activeCells=" + activeCells +
+                '}';
+    }
 }

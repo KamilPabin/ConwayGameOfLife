@@ -18,6 +18,10 @@ public class WorldDto {
         return activeCells;
     }
 
+    public boolean hasActiveCellAt(int x, int y) {
+        return activeCells.stream().anyMatch(cell -> cell.getX() == x && cell.getY() == y);
+    }
+
     @Override
     public String toString() {
         return "WorldDto{" +

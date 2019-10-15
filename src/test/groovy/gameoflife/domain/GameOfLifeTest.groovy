@@ -64,6 +64,7 @@ class GameOfLifeTest extends Specification {
 
         then: "World is alive"
         !world.isDead()
+        world.hasActiveCellAt(1, 1)
     }
 
     def "Dead cell with three neighbours should become alive"() {
@@ -79,7 +80,7 @@ class GameOfLifeTest extends Specification {
         gameOfLife.tick()
         WorldDto world = gameOfLife.world()
 
-        then: "World is alive"
+        then: "Dead cell is alive now"
         def expectedWorld = new WorldBuilder()
                 .withAliveCellAt(1, 1)
                 .withAliveCellAt(1, 2)
@@ -87,5 +88,24 @@ class GameOfLifeTest extends Specification {
                 .withAliveCellAt(2, 2)
                 .build()
         expectedWorld.activeCells.containsAll(world.activeCells)
+    }
+
+    def "Cell in overpopulated spot should die"() {
+        given: "World with three adjacent cells"
+        WorldDto worldDto = new WorldBuilder()
+                .withAliveCellAt(2, 2)
+                .withAliveCellAt(1, 2)
+                .withAliveCellAt(3, 2)
+                .withAliveCellAt(2, 1)
+                .withAliveCellAt(2, 3)
+                .build()
+        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
+
+        when: "World moves by one game tick"
+        gameOfLife.tick()
+        WorldDto world = gameOfLife.world()
+
+        then: "World is alive"
+        !world.hasActiveCellAt(2, 2)
     }
 }

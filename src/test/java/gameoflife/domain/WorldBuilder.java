@@ -1,7 +1,7 @@
 package gameoflife.domain;
 
-import gameoflife.api.ActiveCell;
-import gameoflife.api.WorldDto;
+import gameoflife.domain.api.ActiveCell;
+import gameoflife.domain.api.WorldDto;
 
 import java.util.ArrayList;
 

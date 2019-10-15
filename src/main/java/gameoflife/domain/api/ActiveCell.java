@@ -1,4 +1,4 @@
-package gameoflife.api;
+package gameoflife.domain.api;
 
 public class ActiveCell {
     private final int x;

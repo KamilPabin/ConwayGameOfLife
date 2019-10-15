@@ -1,6 +1,7 @@
 package gameoflife.domain
 
-import gameoflife.api.WorldDto
+
+import gameoflife.domain.api.WorldDto
 import spock.lang.Specification
 
 class GameOfLifeTest extends Specification {
@@ -22,7 +23,7 @@ class GameOfLifeTest extends Specification {
         WorldDto worldDto = new WorldBuilder()
                 .withAliveCellAt(1, 1)
                 .build()
-        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto)
+        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
 
         when: "Game moves by one game tick"
         gameOfLife.tick()
@@ -38,7 +39,7 @@ class GameOfLifeTest extends Specification {
                 .withAliveCellAt(1, 1)
                 .withAliveCellAt(1, 2)
                 .build()
-        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto)
+        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
 
         when: "World moves by one game tick"
         gameOfLife.tick()
@@ -46,5 +47,22 @@ class GameOfLifeTest extends Specification {
 
         then: "World is dead"
         world.isDead()
+    }
+
+    def "World with three adjacent cells should stay alive"() {
+        given: "World with three adjacent cells"
+        WorldDto worldDto = new WorldBuilder()
+                .withAliveCellAt(1, 1)
+                .withAliveCellAt(1, 2)
+                .withAliveCellAt(2, 1)
+                .build()
+        GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
+
+        when: "World moves by one game tick"
+        gameOfLife.tick()
+        WorldDto world = gameOfLife.world()
+
+        then: "World is alive"
+        !world.isDead()
     }
 }

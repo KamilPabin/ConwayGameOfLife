@@ -1,6 +1,6 @@
 package gameoflife.domain;
 
-import gameoflife.api.WorldDto;
+import gameoflife.domain.api.WorldDto;
 
 public interface GameOfLife {
 

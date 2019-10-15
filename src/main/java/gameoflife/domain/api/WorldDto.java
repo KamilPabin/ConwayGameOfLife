@@ -1,4 +1,4 @@
-package gameoflife.api;
+package gameoflife.domain.api;
 
 import java.util.List;
 
@@ -12,5 +12,9 @@ public class WorldDto {
 
     public boolean isDead() {
         return activeCells.isEmpty();
+    }
+
+    public List<ActiveCell> getActiveCells() {
+        return activeCells;
     }
 }

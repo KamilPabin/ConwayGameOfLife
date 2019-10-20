@@ -3,6 +3,7 @@ package gameoflife.domain
 
 import gameoflife.domain.api.WorldDto
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class GameOfLifeTest extends Specification {
 
@@ -49,7 +50,7 @@ class GameOfLifeTest extends Specification {
         world.isDead()
     }
 
-    def "World with three adjacent cells should stay alive"() {
+    def "Cell with two neighbours should stay alive"() {
         given: "World with three adjacent cells"
         WorldDto worldDto = new WorldBuilder()
                 .withAliveCellAt(1, 1)
@@ -90,15 +91,11 @@ class GameOfLifeTest extends Specification {
         expectedWorld.activeCells.containsAll(world.activeCells)
     }
 
-    def "Cell in overpopulated spot should die"() {
+    @Unroll
+    def "Cell in overpopulated spot should die, neighbourhood size: #numberOfCellsInNeighbourhood"() {
         given: "World with three adjacent cells"
-        WorldDto worldDto = new WorldBuilder()
-                .withAliveCellAt(2, 2)
-                .withAliveCellAt(1, 2)
-                .withAliveCellAt(3, 2)
-                .withAliveCellAt(2, 1)
-                .withAliveCellAt(2, 3)
-                .build()
+        def worldDto = buildNeighbourhood(numberOfCellsInNeighbourhood)
+
         GameOfLife gameOfLife = new ConwayGameOfLife(worldDto, 10, 10)
 
         when: "World moves by one game tick"
@@ -107,5 +104,18 @@ class GameOfLifeTest extends Specification {
 
         then: "World is alive"
         !world.hasActiveCellAt(2, 2)
+
+        where:
+        numberOfCellsInNeighbourhood << [5, 6, 7, 8, 9]
+    }
+
+    WorldDto buildNeighbourhood(int numberOfCells) {
+        def worldBuilder = new WorldBuilder()
+        for (int i = 0; i < numberOfCells; i++) {
+            int x = 1 + i % 3
+            int y = 1 + (int) Math.floor(i / 3)
+            worldBuilder.withAliveCellAt(x, y)
+        }
+        return worldBuilder.build()
     }
 }
